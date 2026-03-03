@@ -2,7 +2,7 @@
 
 template< class T >
 struct BiList {
-  T val;
+  T val; // Должен иметь конструктор копирования
   BiList< T > * prev;
   BiList< T > * next;
 };
