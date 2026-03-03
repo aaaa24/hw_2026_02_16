@@ -24,11 +24,17 @@ BiList< T > * rmfake(BiList< T > * h) noexcept
 }
 
 template< class T >
+BiList< T > * create(const T & d)
+{
+  BiList< T > * r = new BiList< T >{d, nullptr, nullptr};
+  r->prev = r;
+  r->next = r;
+  return r;
+}
+
+template< class T >
 BiList< T > * insert_before(BiList< T > * node, const T & d)
 {
-  if (!node) {
-    return new BiList< T >{d, nullptr, nullptr};
-  }
   BiList< T > * prev = node->prev;
   BiList< T > * r = new BiList< T >{d, prev, node};
   prev->next = r;
@@ -39,9 +45,6 @@ BiList< T > * insert_before(BiList< T > * node, const T & d)
 template< class T >
 BiList< T > * insert_after(BiList< T > * node, const T & d)
 {
-  if (!node) {
-    return new BiList< T >{d, nullptr, nullptr};
-  }
   BiList< T > * next = node->next;
   BiList< T > * r = new BiList< T >{d, node, next};
   next->prev = r;
@@ -50,10 +53,38 @@ BiList< T > * insert_after(BiList< T > * node, const T & d)
 }
 
 template< class T >
-BiList< T > * cut_fwd(BiList< T > * node);
+void cut(BiList< T > * node) noexcept
+{
+  BiList< T > * prev = node->prev;
+  BiList< T > * next = node->next;
+  prev->next = next;
+  next->prev = prev;
+  delete node;
+}
 
 template< class T >
-BiList< T > * cut_bwd(BiList< T > * node);
+BiList< T > * cut_fwd(BiList< T > * node)
+{
+  BiList< T > * r = node->next;
+  if (r == node) {
+    delete node;
+    return nullptr;
+  }
+  cut(node);
+  return r;
+}
+
+template< class T >
+BiList< T > * cut_bwd(BiList< T > * node)
+{
+  BiList< T > * r = node->prev;
+  if (r == node) {
+    delete node;
+    return nullptr;
+  }
+  cut(node);
+  return r;
+}
 
 template< class T >
 BiList< T > * clear(BiList< T > * h, BiList< T > * e) noexcept;
