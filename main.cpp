@@ -89,9 +89,9 @@ BiList< T > * cut_bwd(BiList< T > * node)
 template< class T >
 BiList< T > * clear(BiList< T > * h, BiList< T > * e) noexcept
 {
-  while (h != e) {
+  do {
     h = cut_fwd(h);
-  }
+  } while (h != e);
   return h;
 }
 
