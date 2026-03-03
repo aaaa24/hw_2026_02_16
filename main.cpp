@@ -102,16 +102,7 @@ BiList< T > * cut_bwd(BiList< T > * node)
 }
 
 template< class T >
-BiList< T > * clear(BiList< T > * h, BiList< T > * e) noexcept
-{
-  do {
-    h = cut_fwd(h);
-  } while (h != e);
-  return h;
-}
-
-template< class T >
-BiList< T > * clear_all(BiList< T > * head) noexcept
+BiList< T > * clear(BiList< T > * head) noexcept
 {
   BiList< T > * fake_node = fake(head);
   while (fake_node->next != fake_node) {
@@ -121,27 +112,7 @@ BiList< T > * clear_all(BiList< T > * head) noexcept
 }
 
 template< class T, class F >
-F traverse(F f, BiList< T > * h, BiList< T > * e)
-{
-  do {
-    f(h->val);
-    h = h->next;
-  } while (h != e);
-  return f;
-}
-
-template< class T, class F >
-F traverse_reverse(F f, BiList< T > * h, BiList< T > * e)
-{
-  do {
-    f(h->val);
-    h = h->prev;
-  } while (h != e);
-  return f;
-}
-
-template< class T, class F >
-F traverse_all(F f, BiList< T > * head)
+F traverse(F f, BiList< T > * head)
 {
   BiList< T > * fake_node = fake(head);
   BiList< T > * curr = fake_node->next;
@@ -149,13 +120,21 @@ F traverse_all(F f, BiList< T > * head)
     f(curr->val);
     curr = curr->next;
   };
-  return rmfake(fake_node);
+  rmfake(fake_node);
+  return f;
 }
 
 template< class T, class F >
-F traverse_reverse_all(F f, BiList< T > * h)
+F traverse_reverse(F f, BiList< T > * head)
 {
-  return traverse_reverse(f, h, h);
+  BiList< T > * fake_node = fake(head);
+  BiList< T > * curr = fake_node->prev;
+  while (curr != fake_node) {
+    f(curr->val);
+    curr = curr->prev;
+  };
+  rmfake(fake_node);
+  return f;
 }
 
 int main()
