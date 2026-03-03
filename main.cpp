@@ -26,9 +26,16 @@ BiList< T > * fake(BiList< T > * h)
 template< class T >
 BiList< T > * rmfake(BiList< T > * fake) noexcept
 {
-  BiList< T > * r = fake->next;
+  if (fake->next == fake) {
+    ::operator delete(fake);
+    return nullptr;
+  }
+  BiList< T > * next = fake->next;
+  BiList< T > * prev = fake->prev;
+  next->prev = prev;
+  prev->next = next;
   ::operator delete(fake);
-  return r;
+  return next;
 }
 
 template< class T >
