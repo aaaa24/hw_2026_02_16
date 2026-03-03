@@ -87,10 +87,19 @@ BiList< T > * cut_bwd(BiList< T > * node)
 }
 
 template< class T >
-BiList< T > * clear(BiList< T > * h, BiList< T > * e) noexcept;
+BiList< T > * clear(BiList< T > * h, BiList< T > * e) noexcept
+{
+  while (h != e) {
+    h = cut_fwd(h);
+  }
+  return h;
+}
 
 template< class T >
-BiList< T > * clear(BiList< T > * h) noexcept;
+BiList< T > * clear_all(BiList< T > * h) noexcept
+{
+  return clear(h, h);
+}
 
 template< class T, class F >
 F traverse(F f, BiList< T > * h, BiList< T > * e) noexcept;
