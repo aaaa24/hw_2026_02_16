@@ -168,5 +168,33 @@ F traverse_reverse_all(F f, BiList< T > * head)
   return f;
 }
 
+template< class T >
+BiList< T > * convert(const T * data, size_t size)
+{
+  BiList< T > * fake_node = fake< T >(nullptr);
+  BiList< T > * node = fake_node;
+  for (size_t i = 0; i < size; ++i) {
+    try {
+      node = insert_after(node, data[i]);
+    } catch (...) {
+      clear_all(fake_node->next);
+      throw;
+    }
+  }
+  return rmfake(fake_node);
+}
+
+void printInt(int num)
+{
+  std::cout << num << " ";
+}
+
 int main()
-{}
+{
+  constexpr size_t size = 5;
+  int array[size] = {1, 2, 3, 4, 5};
+  BiList< int > * list = convert(array, size);
+  traverse_all(printInt, list);
+  std::cout << "\b\n";
+  clear_all(list);
+}
