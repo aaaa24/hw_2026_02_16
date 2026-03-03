@@ -10,16 +10,24 @@ struct BiList {
 template< class T >
 BiList< T > * fake(BiList< T > * h)
 {
-  BiList< T > * r = static_cast< List< T > * >(::operator new (sizeof(List< T > *)));
-  r->next = h;
-  return h;
+  BiList< T > * f = static_cast< BiList< T > * >(::operator new (sizeof(BiList< T > *)));
+  if (!h) {
+    f->next = f;
+    f->prev = f;
+  } else {
+    f->next = h;
+    f->prev = h->prev;
+    h->prev->next = f;
+    h->prev = f;
+  }
+  return f;
 }
 
 template< class T >
-BiList< T > * rmfake(BiList< T > * h) noexcept
+BiList< T > * rmfake(BiList< T > * fake) noexcept
 {
-  BiList< T > * r = h->next;
-  ::operator delete(h);
+  BiList< T > * r = fake->next;
+  ::operator delete(fake);
   return r;
 }
 
@@ -105,7 +113,7 @@ template< class T, class F >
 F traverse(F f, BiList< T > * h, BiList< T > * e)
 {
   do {
-    f(v->val);
+    f(h->val);
     h = h->next;
   } while (h != e);
   return f;
@@ -115,7 +123,7 @@ template< class T, class F >
 F traverse_reverse(F f, BiList< T > * h, BiList< T > * e)
 {
   do {
-    f(v->val);
+    f(h->val);
     h = h->prev;
   } while (h != e);
   return f;
