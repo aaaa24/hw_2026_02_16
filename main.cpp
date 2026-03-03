@@ -102,16 +102,36 @@ BiList< T > * clear_all(BiList< T > * h) noexcept
 }
 
 template< class T, class F >
-F traverse(F f, BiList< T > * h, BiList< T > * e) noexcept;
+F traverse(F f, BiList< T > * h, BiList< T > * e)
+{
+  do {
+    f(v->val);
+    h = h->next;
+  } while (h != e);
+  return f;
+}
 
 template< class T, class F >
-F traverse_reverse(F f, BiList< T > * h, BiList< T > * e) noexcept;
+F traverse_reverse(F f, BiList< T > * h, BiList< T > * e)
+{
+  do {
+    f(v->val);
+    h = h->prev;
+  } while (h != e);
+  return f;
+}
 
 template< class T, class F >
-F traverse(F f, BiList< T > * h) noexcept;
+F traverse_all(F f, BiList< T > * h)
+{
+  return traverse(f, h, h);
+}
 
 template< class T, class F >
-F traverse_reverse(F f, BiList< T > * h) noexcept;
+F traverse_reverse_all(F f, BiList< T > * h)
+{
+  return traverse_reverse(f, h, h);
+}
 
 int main()
 {}
